@@ -100,10 +100,16 @@ export async function POST(request: Request) {
         demo: true
       })
     }
-  } catch (error) {
-    console.error('analysis error:', error)
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    console.error('analysis error:', errorMessage, errorStack)
     return NextResponse.json(
-      { error: 'ANALYSIS_FAILED', message: 'failed to analyze audio' },
+      { 
+        error: 'ANALYSIS_FAILED', 
+        message: 'failed to analyze audio',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
       { status: 500 }
     )
   }

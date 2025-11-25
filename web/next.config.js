@@ -6,6 +6,13 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // serverless function configuration
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },
+
   // image optimization settings
   images: {
     domains: ['localhost'],

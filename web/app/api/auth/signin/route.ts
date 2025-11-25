@@ -3,9 +3,10 @@ import { NextResponse } from 'next/server'
 // simple jwt-like token generation
 // in production use a real jwt library but this works for demo
 function generateToken(payload: object): string {
-  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
-  const body = btoa(JSON.stringify({ ...payload, exp: Date.now() + 86400000 }))
-  const signature = btoa(Math.random().toString(36).substring(2))
+  // Use Buffer for Node.js compatibility (works in Vercel serverless)
+  const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64')
+  const body = Buffer.from(JSON.stringify({ ...payload, exp: Date.now() + 86400000 })).toString('base64')
+  const signature = Buffer.from(Math.random().toString(36).substring(2)).toString('base64')
   return `${header}.${body}.${signature}`
 }
 
@@ -68,10 +69,16 @@ export async function POST(request: Request) {
       },
       { status: 200 }
     )
-  } catch (error) {
-    console.error('signin error:', error)
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    console.error('signin error:', errorMessage, errorStack)
     return NextResponse.json(
-      { error: 'SERVER_ERROR', message: 'something went wrong' },
+      { 
+        error: 'SERVER_ERROR', 
+        message: 'something went wrong',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
       { status: 500 }
     )
   }
