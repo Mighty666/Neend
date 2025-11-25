@@ -1,31 +1,25 @@
 /** @type {import('next').NextConfig} */
 
-// next config for vercel deployment
-// had to add a bunch of stuff to make it work properly
-
 const nextConfig = {
   reactStrictMode: true,
 
-  // serverless function configuration
   experimental: {
+    appDir: true, // enable app router for /app/api routes
     serverActions: {
       bodySizeLimit: '10mb',
     },
   },
 
-  // image optimization settings
   images: {
     domains: ['localhost'],
     unoptimized: process.env.NODE_ENV === 'development',
   },
 
-  // environment variables that are safe to expose to browser
   env: {
     NEXT_PUBLIC_APP_NAME: 'NeendAI',
     NEXT_PUBLIC_APP_VERSION: '1.0.0',
   },
 
-  // headers for cors and security
   async headers() {
     return [
       {
@@ -40,7 +34,6 @@ const nextConfig = {
     ]
   },
 
-  // redirects
   async redirects() {
     return [
       {
