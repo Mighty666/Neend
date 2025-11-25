@@ -1,32 +1,36 @@
-FROM python:3.11-slim
+FROM node:20-alpine AS base
 
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+# Production image
+FROM base AS runner
 WORKDIR /app
 
-# Install system dependencies for audio processing
-RUN apt-get update && apt-get install -y \
-    libsndfile1 \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=production
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy application code
-COPY src/ ./src/
-COPY examples/ ./examples/
-# Copy entrypoint files for deployment platforms
-COPY app.py main.py index.py server.py pyproject.toml Procfile ./
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Create data directory
-RUN mkdir -p /app/data
+USER nextjs
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
+EXPOSE 3000
 
-# Expose port
-EXPOSE 8000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# Run the API server
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["node", "server.js"]
