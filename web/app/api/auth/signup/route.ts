@@ -27,12 +27,34 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    // Handle null/undefined request
+    if (!request) {
+      return NextResponse.json(
+        { error: 'INVALID_REQUEST', message: 'Request is required' },
+        { status: 400 }
+      )
+    }
+
     let body
     try {
-      body = await request.json()
+      const text = await request.text()
+      if (!text) {
+        return NextResponse.json(
+          { error: 'EMPTY_BODY', message: 'Request body is required' },
+          { status: 400 }
+        )
+      }
+      body = JSON.parse(text)
     } catch (parseError) {
       return NextResponse.json(
         { error: 'INVALID_JSON', message: 'Request body must be valid JSON' },
+        { status: 400 }
+      )
+    }
+    
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json(
+        { error: 'INVALID_BODY', message: 'Request body must be an object' },
         { status: 400 }
       )
     }

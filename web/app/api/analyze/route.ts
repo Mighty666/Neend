@@ -75,6 +75,14 @@ function generateMockAnalysis(): AnalysisResult {
 
 export async function POST(request: Request) {
   try {
+    // Handle null/undefined request
+    if (!request) {
+      return NextResponse.json(
+        { error: 'INVALID_REQUEST', message: 'Request is required' },
+        { status: 400 }
+      )
+    }
+
     const contentType = request.headers.get('content-type') || ''
     
     if (!contentType) {

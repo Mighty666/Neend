@@ -6,6 +6,9 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // Output configuration for Vercel
+  output: 'standalone',
+
   // serverless function configuration
   experimental: {
     serverActions: {
