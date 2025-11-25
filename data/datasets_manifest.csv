@@ -1,0 +1,6 @@
+dataset_name,num_recordings,total_hours,sample_rate,source_url,license,notes
+sleep-edf,197,1500,100,https://physionet.org/content/sleep-edfx/,ODC-BY,expanded version with 197 PSG recordings from 1987-1991
+shhs,1423,11000,varies,https://sleepdata.org/datasets/shhs,restricted,need to request access - took me 2 weeks to get approved
+physionet-apnea-ecg,70,560,100,https://physionet.org/content/apnea-ecg/,ODC-BY,classic benchmark dataset for apnea detection
+a3-dataset,432,3400,16000,https://github.com/a3-dataset/a3,MIT,newer dataset with high quality audio - really good labels
+cosmos,725,5800,44100,request only,research,had to email the authors multiple times to get this one
