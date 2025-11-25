@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server'
 
+// Runtime configuration for Vercel serverless
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const maxDuration = 30
+
 // simple jwt-like token generation
 // in production use a real jwt library but this works for demo
 function generateToken(payload: object): string {
@@ -20,9 +25,25 @@ const DEMO_USERS: Record<string, { name: string; email: string; passwordHash: st
   }
 }
 
+export async function GET() {
+  return NextResponse.json({
+    status: 'ready',
+    message: 'Sign in API endpoint. POST with email and password.'
+  })
+}
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
+    let body
+    try {
+      body = await request.json()
+    } catch (parseError) {
+      return NextResponse.json(
+        { error: 'INVALID_JSON', message: 'Request body must be valid JSON' },
+        { status: 400 }
+      )
+    }
+    
     const { email, password } = body
 
     // validate input

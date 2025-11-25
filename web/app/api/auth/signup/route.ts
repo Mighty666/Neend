@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server'
 
+// Runtime configuration for Vercel serverless
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const maxDuration = 30
+
 // simple token generation (same as signin)
 function generateToken(payload: object): string {
   // Use Buffer for Node.js compatibility (works in Vercel serverless)
@@ -13,9 +18,25 @@ function generateToken(payload: object): string {
 // note: this resets on each deployment but works for demo
 const registeredEmails = new Set(['demo@neendai.com'])
 
+export async function GET() {
+  return NextResponse.json({
+    status: 'ready',
+    message: 'Sign up API endpoint. POST with name, email, and password.'
+  })
+}
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
+    let body
+    try {
+      body = await request.json()
+    } catch (parseError) {
+      return NextResponse.json(
+        { error: 'INVALID_JSON', message: 'Request body must be valid JSON' },
+        { status: 400 }
+      )
+    }
+    
     const { name, email, password } = body
 
     // validate input

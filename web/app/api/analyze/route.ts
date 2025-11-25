@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server'
 
+// Runtime configuration for Vercel serverless
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const maxDuration = 30
+
 // mock analysis for demo since we dont have the python backend on vercel
 // in production this would call the actual ml api
 
@@ -71,6 +76,14 @@ function generateMockAnalysis(): AnalysisResult {
 export async function POST(request: Request) {
   try {
     const contentType = request.headers.get('content-type') || ''
+    
+    if (!contentType) {
+      return NextResponse.json({
+        success: true,
+        message: 'analysis api ready. send audio file as multipart/form-data.',
+        demo: true
+      })
+    }
 
     if (contentType.includes('multipart/form-data')) {
       const formData = await request.formData()
