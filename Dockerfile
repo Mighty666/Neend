@@ -15,6 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY src/ ./src/
 COPY examples/ ./examples/
+# Copy entrypoint files for deployment platforms
+COPY app.py main.py index.py server.py pyproject.toml Procfile ./
 
 # Create data directory
 RUN mkdir -p /app/data
