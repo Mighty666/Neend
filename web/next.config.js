@@ -12,8 +12,11 @@ const nextConfig = {
 
   images: {
     domains: ['localhost'],
-    unoptimized: process.env.NODE_ENV === 'development',
+    unoptimized: true,
   },
+  
+  // Ensure proper output for Vercel
+  output: 'standalone',
 
   env: {
     NEXT_PUBLIC_APP_NAME: 'NeendAI',
