@@ -2,7 +2,8 @@
 *.py
 !web/**/*.py
 src/
-api/
+# Only ignore root-level api/ directory, not web/app/api/ (Next.js API routes)
+^api/
 requirements.txt
 requirements-research.txt
 pyproject.toml
