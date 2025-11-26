@@ -5,9 +5,6 @@ import { Toaster } from 'react-hot-toast'
 export const metadata: Metadata = {
   title: 'NeendAI - Sleep Apnea Detection',
   description: 'AI-powered sleep analysis. Know your breath. Own your night.',
-  icons: {
-    icon: '/favicon.ico',
-  },
 }
 
 export default function RootLayout({
