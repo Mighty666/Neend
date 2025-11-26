@@ -14,9 +14,6 @@ const nextConfig = {
     domains: ['localhost'],
     unoptimized: true,
   },
-  
-  // Ensure proper output for Vercel
-  output: 'standalone',
 
   env: {
     NEXT_PUBLIC_APP_NAME: 'NeendAI',
