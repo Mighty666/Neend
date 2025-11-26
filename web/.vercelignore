@@ -1,0 +1,4 @@
+# Vercel ignore file for web directory
+# Since root directory is set to web, this file controls what gets excluded
+# We want to keep app/api/ (Next.js API routes) but can ignore other things if needed
+
