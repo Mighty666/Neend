@@ -1,7 +1,5 @@
 {
-  "buildCommand": "cd . && npm install && npm run build",
-  "outputDirectory": ".next",
-  "framework": null,
+  "framework": "nextjs",
   "regions": ["iad1"],
   "headers": [
     {
