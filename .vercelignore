@@ -18,4 +18,16 @@ mobile/
 notebooks/
 research/
 tests/
+# Ignore root-level Next.js files that might confuse Vercel
+# Since root directory is set to web/, Vercel should only use web/package.json
+package.json
+package-lock.json
+next.config.js
+tsconfig.json
+postcss.config.js
+tailwind.config.ts
+next-env.d.ts
+app/
+components/
+hooks/
 
